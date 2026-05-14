@@ -6,11 +6,16 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+#define ALPHABET (UCHAR_MAX + 1)
+
 // Implements brute-force string matching
 // Input: An array T [0..n − 1] of n characters representing a text and an array P [0..m − 1] of m characters representing a pattern
 // Output: The index of the first character in the text that starts a matching substring or −1 if the search is unsuccessful
 int bruteForce(char *text, size_t tlength, char *pattern, size_t plength, size_t *count);
 
+// Implements Boyer-Moore’s algorithm for string matching
+// Input: Pattern P [0..m − 1] and text T [0..n − 1]
+// Output: The index of the left end of the first matching substring or −1 if there are no matches
 int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t *count);
 
 // Fills the shift table used by Horspool’s and Boyer-Moore algorithms
