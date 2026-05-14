@@ -1,0 +1,4 @@
+**/*.pdf
+**/*.zip
+**/bin/
+**/instructions/
