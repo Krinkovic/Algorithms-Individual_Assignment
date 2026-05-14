@@ -6,15 +6,16 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-//Implements brute-force string matching
-//Input: An array T [0..n − 1] of n characters representing a text and
-//
-// an array P [0..m − 1] of m characters representing a pattern
-//Output: The index of the first character in the text that starts a
-//
-// matching substring or −1 if the search is unsuccessful
-int bruteForce(char* text, size_t tlength, char* pattern, size_t plength, size_t *count);
+// Implements brute-force string matching
+// Input: An array T [0..n − 1] of n characters representing a text and an array P [0..m − 1] of m characters representing a pattern
+// Output: The index of the first character in the text that starts a matching substring or −1 if the search is unsuccessful
+int bruteForce(char *text, size_t tlength, char *pattern, size_t plength, size_t *count);
 
-int boyerMoore(char* text, size_t tlength, char* pattern, size_t plength, size_t *count);
+int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t *count);
+
+// Fills the shift table used by Horspool’s and Boyer-Moore algorithms
+// Input: Pattern P [0..m − 1] and an alphabet of possible characters
+// Output: Table[0..size − 1] indexed by the alphabet’s characters and filled with shift sizes computed by formula (7.1)
+int* shiftTable(char *pattern);
 
 #endif

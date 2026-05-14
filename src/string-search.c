@@ -4,15 +4,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <string.h>
 #include "../include/string-search.h"
 
-//Implements brute-force string matching
-//Input: An array T[0..n − 1] of n characters representing a text and
-//
-// an array P[0..m − 1] of m characters representing a pattern
-//Output: The index of the first character in the text that starts a
-//
-// matching substring or −1 if the search is unsuccessful
+#define ALPHABET (UCHAR_MAX + 1)
+
+// Brute force matching
+// Implements brute-force string matching
+// Input: An array T[0..n − 1] of n characters representing a text and an array P[0..m − 1] of m characters representing a pattern
+// Output: The index of the first character in the text that starts a matching substring or −1 if the search is unsuccessful
 //
 // for i <- 0 to n − m do
     // j <- 0
@@ -20,9 +21,10 @@
         // j <- j + 1
     // if j = m return i
 // return −1
-int bruteForce(char* text, size_t tlength, char* pattern, size_t plength, size_t *count)
+int bruteForce(char *text, size_t tlength, char *pattern, size_t plength, size_t *count)
 {
     *count = 0;
+    printf("|| Alphabet: %d\n", ALPHABET);
     for (int i = 0; i <= tlength - plength; i++) { // Start at zero and move to the end - the length of the pattern
         int j = 0;
         while (j < plength && pattern[j] == text[i + j]) { // When a letter matches, move to check the next one
@@ -38,7 +40,33 @@ int bruteForce(char* text, size_t tlength, char* pattern, size_t plength, size_t
     return -1;
 }
 
-int boyerMoore(char* text, size_t tlength, char* pattern, size_t plength, size_t *count)
+int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t *count)
 {
-    return 0;
+    int *table = shiftTable(pattern);
+    // TODO
+    free(table);
+    return -1;
+}
+
+// Shift table
+// Fills the shift table used by Horspool’s and Boyer-Moore algorithms
+// Input: Pattern P [0..m − 1] and an alphabet of possible characters
+// Output: Table[0..size − 1] indexed by the alphabet’s characters and filled with shift sizes computed by formula (7.1)
+//
+// for i ← 0 to size − 1 do Table[i] ← m
+// for j ← 0 to m − 2 do Table[P [j ]] ← m − 1 − j
+// return Table
+int* shiftTable(char *pattern)
+{
+    int *table = malloc(ALPHABET * sizeof(int));
+    int pLen = strlen(pattern);
+
+    for (int i = 0; i < ALPHABET; i++) {
+        pattern[i] = pLen;
+    }
+
+    for (int i = pLen; i < pLen - 1; i++) {
+        table[pattern[i]] = pLen - 1 - i;
+    }
+    return table;
 }
