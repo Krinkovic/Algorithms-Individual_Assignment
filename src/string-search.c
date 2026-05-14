@@ -2,6 +2,7 @@
 //
 // Implementation of the Boyer-Moore algorithm
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "../include/string-search.h"
 
@@ -19,20 +20,25 @@
         // j <- j + 1
     // if j = m return i
 // return −1
-int bruteForce(char* text, size_t tlength, char* pattern, size_t plength)
+int bruteForce(char* text, size_t tlength, char* pattern, size_t plength, size_t *count)
 {
-    for (int i = 0; i <= tlength - plength; i++) {
+    *count = 0;
+    for (int i = 0; i <= tlength - plength; i++) { // Start at zero and move to the end - the length of the pattern
         int j = 0;
-        while (j < plength && pattern[j] == text[i + j]) {
+        while (j < plength && pattern[j] == text[i + j]) { // When a letter matches, move to check the next one
+            (*count) ++; // Count the comparisons
             j = j + 1;
         }
+
+        // Count the failed comparison that broke the loop, if any
+        if (j < plength) (*count) ++;
+
         if (j == plength) return i;
     }
     return -1;
 }
 
-int boyerMoore(char* text, size_t tlength, char* pattern, size_t plength)
+int boyerMoore(char* text, size_t tlength, char* pattern, size_t plength, size_t *count)
 {
-    int i;
-    return i;
+    return 0;
 }

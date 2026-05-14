@@ -3,6 +3,7 @@
 #ifndef BOYER_MOORE_H
 #define BOYER_MOORE_H
 
+#include <stddef.h>
 #include <stdlib.h>
 
 //Implements brute-force string matching
@@ -12,8 +13,8 @@
 //Output: The index of the first character in the text that starts a
 //
 // matching substring or −1 if the search is unsuccessful
-int bruteForce(char* text, size_t tlength, char* pattern, size_t plength);
+int bruteForce(char* text, size_t tlength, char* pattern, size_t plength, size_t *count);
 
-int boyerMoore(char* text, size_t tlength, char* pattern, size_t plength);
+int boyerMoore(char* text, size_t tlength, char* pattern, size_t plength, size_t *count);
 
 #endif
