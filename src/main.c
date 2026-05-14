@@ -1,7 +1,7 @@
 // 2026 Kristoffer
 
 #include <stdio.h>
-#include "../include/boyer-moore.h"
+#include "../include/string-search.h"
 
 int main(void)
 {
