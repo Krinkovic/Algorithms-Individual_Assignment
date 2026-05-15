@@ -60,7 +60,7 @@ return −1 */
 int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t *count)
 {
     // TODO: Upgrade it from just Horspool to Boyer-Moore.
-    // TODO: Test if it works.
+    // TODO: Test if Boyer-Moore upgrade works.
     // TODO: Add basic operations counter.
     int *table = shiftTable(pattern);
     if (table == NULL) {
@@ -75,7 +75,7 @@ int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t
         int matched = 0; // Number of characters matched.
 
         // Count number of matched characters in current position.
-        while (matched < plength && pattern[tlength - 1 - matched] == text[end - matched]) {
+        while (matched < plength && pattern[plength - 1 - matched] == text[end - matched]) {
             matched++;
         }
 
@@ -107,11 +107,11 @@ int* shiftTable(char *pattern)
 
     // Initialize all character skips to the length of the pattern.
     for (int i = 0; i < ALPHABET; i++) {
-        pattern[i] = pLen;
+        table[i] = pLen;
     }
 
     // Adjust the skips of the characters that are in the pattern to match how far from the end they are.
-    for (int i = pLen; i < pLen - 1; i++) {
+    for (int i = 0; i < pLen - 1; i++) {
         table[(unsigned char)pattern[i]] = pLen - 1 - i;
     }
     return table;
