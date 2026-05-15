@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -std=c99 -pedantic
+CFLAGS = -Wall -Werror -Wextra -std=c99 -pedantic-errors
 
 main: ./bin/main
 

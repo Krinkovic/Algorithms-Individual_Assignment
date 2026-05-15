@@ -2,6 +2,7 @@
 //
 // Implementation of the Boyer-Moore algorithm
 
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -25,8 +26,8 @@ int bruteForce(char *text, size_t tlength, char *pattern, size_t plength, size_t
     *count = 0; // Basic operations counter.
 
     // Start at zero and move to the end minus the length of the pattern.
-    for (int i = 0; i <= tlength - plength; i++) {
-        int j = 0;
+    for (size_t i = 0; i <= tlength - plength; i++) {
+        size_t j = 0;
 
         // When a letter matches, move to check the next one.
         while (j < plength && pattern[j] == text[i + j]) {
@@ -67,12 +68,12 @@ int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
-    int end = plength - 1; // Rightmost end of the pattern.
+    size_t end = plength - 1; // Rightmost end of the pattern.
     *count = 0; // Basic operations counter.
 
     // Loop while the pattern has not passed the text.
     while (end < tlength) {
-        int matched = 0; // Number of characters matched.
+        size_t matched = 0; // Number of characters matched.
 
         // Count number of matched characters in current position.
         while (matched < plength && pattern[plength - 1 - matched] == text[end - matched]) {
@@ -105,15 +106,15 @@ int* shiftTable(char *pattern)
     int *table = malloc(ALPHABET * sizeof(int));
     if (table == NULL) return NULL;
 
-    int pLen = strlen(pattern);
+    size_t pLen = strlen(pattern);
 
     // Initialize all character skips to the length of the pattern.
-    for (int i = 0; i < ALPHABET; i++) {
+    for (size_t i = 0; i < ALPHABET; i++) {
         table[i] = pLen;
     }
 
     // Adjust the skips of the characters that are in the pattern to match how far from the end they are.
-    for (int i = 0; i < pLen - 1; i++) {
+    for (size_t i = 0; i < pLen - 1; i++) {
         table[(unsigned char)pattern[i]] = pLen - 1 - i;
     }
     return table;
