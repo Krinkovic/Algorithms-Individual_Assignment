@@ -67,19 +67,23 @@ int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
-    int end = plength - 1;
-    *count = 0;
+    int end = plength - 1; // Rightmost end of the pattern.
+    *count = 0; // Basic operations counter.
 
-    while (end <= tlength - 1) {
-        int matched = 0;
-        while (matched <= tlength - 1 && pattern[tlength - 1 - matched] == text[end - matched]) {
+    // Loop while the pattern has not passed the text.
+    while (end < tlength) {
+        int matched = 0; // Number of characters matched.
+
+        // Count number of matched characters in current position.
+        while (matched < plength && pattern[tlength - 1 - matched] == text[end - matched]) {
             matched++;
         }
 
+        // If the whole pattern has been found, return index of first character. Else move pattern according to the shift table.
         if (matched == plength) {
             free(table);
             return end - plength + 1;
-        } else end += table[text[end]];
+        } else end += table[(unsigned char)text[end]];
     }
 
     free(table);
@@ -108,7 +112,7 @@ int* shiftTable(char *pattern)
 
     // Adjust the skips of the characters that are in the pattern to match how far from the end they are.
     for (int i = pLen; i < pLen - 1; i++) {
-        table[pattern[i]] = pLen - 1 - i;
+        table[(unsigned char)pattern[i]] = pLen - 1 - i;
     }
     return table;
 }
