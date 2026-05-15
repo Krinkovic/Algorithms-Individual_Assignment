@@ -33,8 +33,8 @@ int bruteForce(char *text, size_t tlength, char *pattern, size_t plength, size_t
             (*count) ++; // Count the comparisons.
             j++;
         }
+        if (j < plength) (*count)++; // Count the failed comparison that broke the loop, if any.
 
-        if (j < plength) (*count) ++; // Count the failed comparison that broke the loop, if any.
         if (j == plength) return i; // Match found.
     }
     return -1;
@@ -76,8 +76,10 @@ int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t
 
         // Count number of matched characters in current position.
         while (matched < plength && pattern[plength - 1 - matched] == text[end - matched]) {
+            (*count)++; // Count the basic operation.
             matched++;
         }
+        if (matched < plength) (*count)++; // Count the failed comparison that broke the loop, if any.
 
         // If the whole pattern has been found, return index of first character. Else move pattern according to the shift table.
         if (matched == plength) {
