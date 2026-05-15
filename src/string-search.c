@@ -21,7 +21,7 @@ for i <- 0 to n − m do
         j <- j + 1
     if j = m return i
     return −1 */
-int bruteForce(char *text, size_t tlength, char *pattern, size_t plength, size_t *count)
+int bruteForce(const char *const text, size_t tlength, const char *const pattern, size_t plength, size_t *const count)
 {
     *count = 0; // Basic operations counter.
 
@@ -58,7 +58,7 @@ while i <= n − 1 do
         return i − m + 1
     else i <- i + Table[T[i]]
 return −1 */
-int boyerMoore(char *text, size_t tlength, char *pattern, size_t plength, size_t *count)
+int boyerMoore(const char *const text, size_t tlength, const char *const pattern, size_t plength, size_t *const count)
 {
     // TODO: Upgrade it from just Horspool to Boyer-Moore.
     // TODO: Test if Boyer-Moore upgrade works.
@@ -101,7 +101,7 @@ Output: Table[0..size − 1] indexed by the alphabet’s characters and filled w
 for i <- 0 to size − 1 do Table[i] <- m
 for j <- 0 to m − 2 do Table[P[j]] <- m − 1 − j
 return Table */
-int* shiftTable(char *pattern)
+int* shiftTable(const char *const pattern)
 {
     int *table = malloc(ALPHABET * sizeof(int));
     if (table == NULL) return NULL;

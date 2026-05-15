@@ -4,7 +4,7 @@
 #include <string.h>
 #include "../include/string-search.h"
 
-void stringSearch(char*, char*);
+void stringSearch(const char *const, const char *const);
 int main(void)
 {
     stringSearch("Heso Peso", "Pizza");
@@ -14,7 +14,7 @@ int main(void)
     return 0;
 }
 
-void stringSearch(char* text, char* pattern)
+void stringSearch(const char *const text, const char  *const pattern)
 {
     size_t count1;
     size_t count2;

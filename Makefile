@@ -14,7 +14,7 @@ run.test: test
 
 test: ./bin/main_test
 
-./bin/main_test: ./src/string-search.c ./testing/testing.c
+./bin/main_test: ./src/string-search.c ./tests/testing.c
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
