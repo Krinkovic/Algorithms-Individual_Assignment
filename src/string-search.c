@@ -63,7 +63,8 @@ int boyerMoore(const char *const text, size_t tlength, const char *const pattern
     // TODO: Upgrade it from just Horspool to Boyer-Moore.
     // TODO: Test if Boyer-Moore upgrade works.
     // TODO: Add basic operations counter.
-    int *table = shiftTable(pattern);
+    int *rawTable = shiftTable(pattern);
+    const int *table = rawTable;
     if (table == NULL) {
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
@@ -84,12 +85,12 @@ int boyerMoore(const char *const text, size_t tlength, const char *const pattern
 
         // If the whole pattern has been found, return index of first character. Else move pattern according to the shift table.
         if (matched == plength) {
-            free(table);
+            free(rawTable);
             return end - plength + 1;
         } else end += table[(unsigned char)text[end]];
     }
 
-    free(table);
+    free(rawTable);
     return -1;
 }
 
