@@ -1,27 +1,40 @@
 // 2026 Kristoffer
 
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include "../include/string-search.h"
 
 void stringSearch(const char *const, const char *const);
+void runAlgorithms(const char* const text, const char* const pattern, int (*algorithms[3])(const char* const, size_t, const char* const, size_t, size_t*));
 int main(void)
 {
-    stringSearch("Heso Peso", "Pizza");
-    stringSearch("bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb", "aaaaaaab");
-    stringSearch("aaaabaaabaaabaabaaabaaabaaabaaabaaabaaabaaabaaabaaaaaaaaaaaab", "aaaaaaab");
-    stringSearch("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", "aaaaaaab");
+    int (*algorithms[3])(const char* const, size_t, const char* const, size_t, size_t* const) = {bruteForce, horspool, boyerMoore};
+    const char* const texts[] = {
+        "heso Peso",
+        "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb",
+        "aaaabaaabaaabaabaaabaaabaaabaaabaaabaaabaaabaaabaaaaaaaaaaaab",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab"
+    };
+    const char* const patterns[]= {
+        "Pizza",
+        "aaaaaaab",
+        "aaaaaaab",
+        "aaaaaaab"
+    };
+
+    for (int i = 0; i < 3; i++) {
+        runAlgorithms(texts[i], patterns[i], algorithms);
+    }
     return 0;
 }
 
-void stringSearch(const char *const text, const char  *const pattern)
+void runAlgorithms(const char* const text, const char* const pattern, int (*algorithms[3])(const char* const, size_t, const char* const, size_t, size_t*))
 {
-    size_t count1;
-    size_t count2;
+    size_t count;
     size_t Tlen = strlen(text);
     size_t Plen = strlen(pattern);
-    int i = bruteForce(text, Tlen, pattern, Plen, &count1);
-    int j = boyerMoore(text, Tlen, pattern, Plen, &count2);
+    char *fNames[] = {"Brute Force", "Horspool", "Boyer-Moore"};
 
     printf("=======================================\n");
     printf("|| -------------\n");
@@ -34,20 +47,16 @@ void stringSearch(const char *const text, const char  *const pattern)
     printf("|| Text length = %zu\n", Tlen);
     printf("|| Pattern length = %zu\n", Plen);
     printf("||\n");
-    printf("|| Brute Force:\n");
-    if (i == -1) {
-        printf("|| Failed to find a match\n");
-    } else {
-        printf("|| Found %s at index %d\n", pattern, i);
+    for (int i = 0; i < 3; i++) {
+        printf("|| %s:\n", fNames[i]);
+        int result = algorithms[i](text, Tlen, pattern, Plen, &count);
+        if (result == -1) {
+            printf("|| Failed to find a match\n");
+        } else {
+            printf("|| Found %s at index %d\n", pattern,result);
+        }
+        printf("|| Basic operations = %zu\n", count);
+        printf("||\n");
     }
-    printf("|| Basic operations = %zu\n", count1);
-    printf("||\n");
-    printf("|| Boyer-Moore:\n");
-    if (j == -1) {
-        printf("|| Failed to find a match\n");
-    } else {
-        printf("|| Found %s at index %d\n", pattern, i);
-    }
-    printf("|| Basic operations = %zu\n", count2);
     printf("=======================================\n\n");
 }

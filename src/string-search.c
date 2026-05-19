@@ -41,6 +41,54 @@ int bruteForce(const char *const text, size_t tlength, const char *const pattern
     return -1;
 }
 
+/* Horspool
+Implements Boyer-Moore’s algorithm for string matching
+Input: Pattern P[0..m − 1] and text T[0..n − 1]
+Output: The index of the left end of the first matching substring or −1 if there are no matches
+
+ShiftTable(P[0..m − 1]) // generate Table of shifts
+i <- m − 1 // position of the pattern’s right end
+while i <= n − 1 do
+    k <- 0 // number of matched characters
+    while k <= m − 1 and P[m − 1 − k] = T[i − k] do
+        k <- k + 1
+    if k = m
+        return i − m + 1
+    else i <- i + Table[T[i]]
+return −1 */
+int horspool(const char *const text, size_t tlength, const char *const pattern, size_t plength, size_t *const count)
+{
+    int *rawTable = shiftTable(pattern);
+    const int *table = rawTable;
+    if (table == NULL) {
+        printf("Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    size_t end = plength - 1; // Rightmost end of the pattern.
+    *count = 0; // Basic operations counter.
+
+    // Loop while the pattern has not passed the text.
+    while (end < tlength) {
+        size_t matched = 0; // Number of characters matched.
+
+        // Count number of matched characters in current position.
+        while (matched < plength && pattern[plength - 1 - matched] == text[end - matched]) {
+            (*count)++; // Count the basic operation.
+            matched++;
+        }
+        if (matched < plength) (*count)++; // Count the failed comparison that broke the loop, if any.
+
+        // If the whole pattern has been found, return index of first character. Else move pattern according to the shift table.
+        if (matched == plength) {
+            free(rawTable);
+            return end - plength + 1;
+        } else end += table[(unsigned char)text[end]];
+    }
+
+    free(rawTable);
+    return -1;
+}
+
 /* Boyer-Moore
 Implements Boyer-Moore’s algorithm for string matching
 Input: Pattern P[0..m − 1] and text T[0..n − 1]
@@ -119,4 +167,12 @@ int* shiftTable(const char *const pattern)
         table[(unsigned char)pattern[i]] = pLen - 1 - i;
     }
     return table;
+}
+
+/* Bad Symbol Shift
+If some characters k > 0 have been matched before a mismatch, shift the pattern based on it's shift table value table[c] - k characters.
+If result is <= 0, shift 1.*/
+void badSymbolShift()
+{
+
 }

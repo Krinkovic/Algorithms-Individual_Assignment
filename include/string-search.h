@@ -13,6 +13,11 @@
 // Output: The index of the first character in the text that starts a matching substring or −1 if the search is unsuccessful
 int bruteForce(const char *const text, size_t tlength, const char *const pattern, size_t plength, size_t *const count);
 
+// Implements Horspool's algorithm for string matching
+// Input: Pattern P [0..m − 1] and text T [0..n − 1]
+// Output: The index of the left end of the first matching substring or −1 if there are no matches
+int horspool(const char *const text, size_t tlength, const char *const pattern, size_t plength, size_t *const count);
+
 // Implements Boyer-Moore’s algorithm for string matching
 // Input: Pattern P [0..m − 1] and text T [0..n − 1]
 // Output: The index of the left end of the first matching substring or −1 if there are no matches
