@@ -1,24 +1,23 @@
-// 2026 Kristoffer
-
-#include <complex.h>
+#include "string-search.h"
+#include <stdatomic.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include "string-search.h"
 
-void printResults(char*, int (char*, size_t, char*, size_t, size_t*), char*, size_t, char*, size_t, size_t*);
+void printResults(int boyer(char*, size_t, char*, size_t, size_t*), char *text, size_t tLen, char *pattern, size_t pLen, size_t *counter);
 
-int main(void)
+int main()
 {
+    // search(text, pat);
     char *text = "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb";
     size_t tLen = strlen(text);
     char *pattern = "Pizza";
     size_t pLen = strlen(pattern);
     size_t count = 0;
+    int result;
 
-    printResults("Brute Force", bruteForce, text, tLen, pattern, pLen, &count);
-    printResults("Horspool", horspool, text, tLen, pattern, pLen, &count);
-    // printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
+
+    printResults(boyerMoore, text, tLen, pattern, pLen, &count);
 
     text = "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb";
     tLen = strlen(text);
@@ -26,9 +25,7 @@ int main(void)
     pLen = strlen(pattern);
     count = 0;
 
-    printResults("Brute Force", bruteForce, text, tLen, pattern, pLen, &count);
-    printResults("Horspool", horspool, text, tLen, pattern, pLen, &count);
-    // printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
+    printResults(boyerMoore, text, tLen, pattern, pLen, &count);
 
     text = "aaaabaaabaaabaabaaabaaabaaabaaabaaabaaabaaabaaabaaaaaaaaaaaab";
     tLen = strlen(text);
@@ -36,18 +33,24 @@ int main(void)
     pLen = strlen(pattern);
     count = 0;
 
-    printResults("Brute Force", bruteForce, text, tLen, pattern, pLen, &count);
-    printResults("Horspool", horspool, text, tLen, pattern, pLen, &count);
-    // printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
+    printResults(boyerMoore, text, tLen, pattern, pLen, &count);
+
+    text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab";
+    tLen = strlen(text);
+    pattern = "aaaaaaab";
+    pLen = strlen(pattern);
+    count = 0;
+
+    printResults(boyerMoore, text, tLen, pattern, pLen, &count);
 
     return 0;
 }
 
-void printResults(char *name, int algorithm(char*, size_t, char*, size_t, size_t*), char *text, size_t tLen, char *pattern, size_t pLen, size_t *counter)
+void printResults(int boyer(char*, size_t, char*, size_t, size_t*), char *text, size_t tLen, char *pattern, size_t pLen, size_t *counter)
 {
     printf("=======================================\n");
     printf("|| -------------\n");
-    printf("|| %s\n", name);
+    printf("|| STRING SEARCH\n");
     printf("|| -------------\n");
     printf("||\n");
     printf("|| Text: %s\n", text);
@@ -56,7 +59,8 @@ void printResults(char *name, int algorithm(char*, size_t, char*, size_t, size_t
     printf("|| Text length = %zu\n", tLen);
     printf("|| Pattern length = %zu\n", pLen);
     printf("||\n");
-    int result = algorithm(text, tLen, pattern, pLen, counter);
+    printf("|| Boyer-Moore:\n");
+    int result = boyerMoore(text, tLen, pattern, pLen, counter);
     if (result == -1) {
         printf("|| Failed to find a match\n");
     } else {
