@@ -70,11 +70,16 @@ int horspool(
     size_t plength,
     size_t *count)
 {
-    size_t *table = shiftTable(pattern);
-    if (table == NULL) {
-        printf("Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+
+    // Create shift table and initialize all character skips to the length of the pattern.
+    size_t shiftTable[ALPHABET];
+    for (size_t i = 0; i < ALPHABET; i++) shiftTable[i] = plength;
+
+    // Adjust the skips of the characters that are in the pattern to match how far from the end they are.
+    for (size_t i = 0; i < plength - 1; i++) {
+        shiftTable[(unsigned char)pattern[i]] = plength - 1 - i;
     }
+
     size_t end = plength - 1; // Rightmost end of the pattern.
     *count = 0; // Basic operations counter.
 
@@ -91,12 +96,10 @@ int horspool(
 
         // If the whole pattern has been found, return index of first character. Else move pattern according to the shift table.
         if (matched == plength) {
-            free(table);
             return end - plength + 1;
-        } else end += table[(unsigned char)text[end]];
+        } else end += shiftTable[(unsigned char)text[end]];
     }
 
-    free(table);
     return -1;
 }
 
@@ -108,11 +111,22 @@ int boyerMoore(
     size_t plength,
     size_t *count)
 {
-    int table[plength + 1];
-    int bpos[plength + 1];
+    // Create the Bad Character shift table and initialize all character skips to the length of the pattern.
+    size_t badCharShift[ALPHABET];
+    for (size_t i = 0; i < ALPHABET; i++) badCharShift[i] = plength;
 
-    preprocess_strong_suffix(table, bpos, pattern, plength);
-    preprocess_case2(table, bpos, plength);
+    // Adjust the skips of the characters that are in the pattern to match how far from the end they are.
+    for (size_t i = 0; i < plength - 1; i++) {
+        badCharShift[(unsigned char)pattern[i]] = plength - 1 - i;
+    }
+
+    // Create the Good Suffix shift table
+    int goodSuffixShift[plength + 1];
+    int bpos[plength + 1];
+    memset(goodSuffixShift, 0, (plength + 1) * sizeof(int));
+
+    preprocess_strong_suffix(goodSuffixShift, bpos, pattern, plength);
+    preprocess_case2(goodSuffixShift, bpos, plength);
 
     int end = plength - 1; // Rightmost end of the pattern.
     *count = 0; // Basic operations counter.
@@ -131,37 +145,10 @@ int boyerMoore(
         // If the whole pattern has been found, return index of first character. Else move pattern according to the shift table.
         if (matched == (int) plength) {
             return end - (int) plength + 1;
-        } else end += table[end + 1];
+        } else end += max((int)badCharShift[(unsigned char)text[end]], goodSuffixShift[plength - matched]);
     }
 
     return -1;
-}
-
-/* Shift table
-Fills the shift table used by Horspool’s and Boyer-Moore algorithms
-Input: Pattern P[0..m − 1] and an alphabet of possible characters
-Output: Table[0..size − 1] indexed by the alphabet’s characters and filled with shift sizes computed by formula (7.1)
-
-for i <- 0 to size − 1 do Table[i] <- m
-for j <- 0 to m − 2 do Table[P[j]] <- m − 1 − j
-return Table */
-size_t* shiftTable(char *pattern)
-{
-    size_t *table = malloc(ALPHABET * sizeof(table));
-    if (table == NULL) return NULL;
-
-    size_t pLen = strlen(pattern);
-
-    // Initialize all character skips to the length of the pattern.
-    for (size_t i = 0; i < ALPHABET; i++) {
-        table[i] = pLen;
-    }
-
-    // Adjust the skips of the characters that are in the pattern to match how far from the end they are.
-    for (size_t i = 0; i < pLen - 1; i++) {
-        table[(unsigned char)pattern[i]] = pLen - 1 - i;
-    }
-    return table;
 }
 
 // I have tried and tried to actually understand how to implement this algorithm, but I just don't get it.

@@ -41,6 +41,12 @@ run-test2: $(BIN_DIR)/test2
 $(BIN_DIR)/test2: $(TEST_DIR)/badsymboltest.c
 	@$(CC) $(CFLAGS) $^ -o $@
 
+run-test3: $(BIN_DIR)/test3
+	@$(BIN_DIR)/test3
+
+$(BIN_DIR)/test3: $(SRC_DIR)/string-search.c $(TEST_DIR)/badsymboltest.c $(INC_DIR)/string-search.h
+	@$(CC) $(CFLAGS) $^ -o $@
+
 debug: CFLAGS += -g
 debug: clean all
 
@@ -50,6 +56,6 @@ release: clean all
 
 clean:
 	@rm -f $(BIN_DIR)/*
-	echo "Clean"
+	@echo "Clean"
 
 .PHONY: main run run-test1 run-test2 clean

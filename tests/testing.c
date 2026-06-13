@@ -18,27 +18,25 @@ int main(void)
 
     printResults("Brute Force", bruteForce, text, tLen, pattern, pLen, &count);
     printResults("Horspool", horspool, text, tLen, pattern, pLen, &count);
-    // printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
+    printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
 
     text = "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcb";
     tLen = strlen(text);
     pattern = "aaaaaaab";
     pLen = strlen(pattern);
-    count = 0;
 
     printResults("Brute Force", bruteForce, text, tLen, pattern, pLen, &count);
     printResults("Horspool", horspool, text, tLen, pattern, pLen, &count);
-    // printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
+    printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
 
     text = "aaaabaaabaaabaabaaabaaabaaabaaabaaabaaabaaabaaabaaaaaaaaaaaab";
     tLen = strlen(text);
     pattern = "aaaaaaab";
     pLen = strlen(pattern);
-    count = 0;
 
     printResults("Brute Force", bruteForce, text, tLen, pattern, pLen, &count);
     printResults("Horspool", horspool, text, tLen, pattern, pLen, &count);
-    // printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
+    printResults("Boyer-Moore", boyerMoore, text, tLen, pattern, pLen, &count);
 
     return 0;
 }
@@ -56,6 +54,7 @@ void printResults(char *name, int algorithm(char*, size_t, char*, size_t, size_t
     printf("|| Text length = %zu\n", tLen);
     printf("|| Pattern length = %zu\n", pLen);
     printf("||\n");
+    *counter = 0;
     int result = algorithm(text, tLen, pattern, pLen, counter);
     if (result == -1) {
         printf("|| Failed to find a match\n");
