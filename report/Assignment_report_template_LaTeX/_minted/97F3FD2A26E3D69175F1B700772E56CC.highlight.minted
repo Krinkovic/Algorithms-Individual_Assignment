@@ -1,0 +1,7 @@
+\begin{MintedVerbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{student}
+\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{r\PYGZus{}no}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{char}\PYG{+w}{ }\PYG{n}{name}\PYG{p}{[}\PYG{l+m+mi}{20}\PYG{p}{];}
+\PYG{p}{\PYGZcb{};}
+\end{MintedVerbatim}

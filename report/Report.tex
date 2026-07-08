@@ -1,0 +1,98 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{verbatim}
+\usepackage{a4wide}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\definecolor{citation}{RGB}{0,96,0}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=citation, filecolor=black, urlcolor=blue}
+
+\title{Analyzing the Efficiency of the Boyer-Moore Algorithm}
+\author{
+	Kristoffer Forsberg \\
+	{\footnotesize Jönköping University} \\
+	\texttt{\footnotesize fokr25ww@student.ju.se} \\
+}
+
+\date{\today}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+In this study I have looked at the string search algorithm designed by Robert S. Boyer and J. Strother Moore \citep{boyer-1977} and analyze it's performance when compared to the Horspool algorithm as well as a brute force approach.
+
+\section{Detailed description of the algorithm(s)}
+
+\subsection{Brute force and Horspool algorithms}
+
+For the brute force approach we start comparing the leftmost character i of the pattern with the leftmost character j of the text. If they don't match we move the pattern one character forward and try again. But if we do get a match we compare the next i+1 and j+1 characters. This continues until we match the entire pattern and return the index of the first character the pattern matched in the text.
+% TODO: Complexity
+
+\subsection{Boyer-Moore}
+
+% TODO: compares from right instead of left
+
+The Boyer-Moore algorithm consists of two precalculated tables, the "bad character table" and the "good suffix table". The bad character table tells the algorithm how many steps it can jump forward based on when, if at all, the mismatched character in the text next appears in the pattern.
+This part is also what makes up Horspool's algorithm.
+
+\vspace{5mm}
+
+The good suffix table on the other hand, based on the substring matched before the mismatch, decides how far we should jump based on where, if anywhere, the substring appears next in the pattern. I also implemented the so called "strong suffix rule", which also takes into account whether any of those suffixes found are preceded by the mismatched character. Since if it does we end up in the same mismatch situation we already have, we skip it to avoid wasting the time comparing the same situation multiple times.
+
+The algorithm gets the correct numbers from each of the tables and picks the higher of the two as the nuber of characters to jump the pattern forward
+
+\subsubsection{The bad character table}
+
+% TODO: content
+Some text here
+
+\subsubsection{The good suffix table}
+
+% TODO: content
+Some text here
+
+\section{Design choices}
+
+What choices were made in the implementation regarding data structures and any parts of the algorithm that were not completely specified in the pseudo code? Give motivations for your choices, and connect to theory, where appropriate. Do any choices affect time and/or memory efficiency?
+
+
+\section{Experiment Planning}
+
+Describe the inputs used and how the testing was done (repetitions, etc).  Give motivations for your choices, for instance, by explaining how input was designed/chosen to test the best, average, and worst case for your algorithm(s). Consider the input size required to test time efficiency against theoretical results carefully. Remember that you probably need many executions with different inputs (of the same size) to obtain a reliable result, such as an average, that you can report.
+
+
+\section{Results}
+\label{results}
+
+Give a number of executions of critical operations and/or time results. Present the results using tables, graphs, and/or text.
+
+
+\section{Analysis}
+\label{analysis}
+
+Connect your results to the known theoretical results. Reason about whether your experiments are consistent with theory or in any way deviate from it, and if so, why. Also, reflect on your experimental design.
+
+
+\section{Conclusions and future work}
+
+Briefly state the main conclusion from the study.
+
+
+\bibliographystyle{plainnat}  % also: cell, plain or alpha
+\bibliography{bibliography}
+
+\clearpage
+\appendix
+\section{Appendix}
+
+\textbf{\emph{(This is an appendix, and does not count for the page limit of 4--6 pages.)}}
+
+Program code and sample executions.
+
+\end{document}

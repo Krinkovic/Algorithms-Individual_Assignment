@@ -54,8 +54,12 @@ release: CFLAGS += -O2 -DNDEBUG
 release: LDFLAGS += -s
 release: clean all
 
+zip: release
+	@zip -r Assignment.zip $(BIN_DIR)/$(EXEC) report/report.pdf
+	@echo "Zipped"
+
 clean:
-	@rm -f $(BIN_DIR)/*
+	@rm -f $(BIN_DIR)/* ./*.zip
 	@echo "Clean"
 
-.PHONY: main run run-test1 run-test2 clean
+.PHONY: main run run-test1 run-test2 clean zip
