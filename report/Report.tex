@@ -6,6 +6,7 @@
 \usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\graphicspath{ {./images} }
 \definecolor{citation}{RGB}{0,96,0}
 \hypersetup{colorlinks=true, linkcolor=black, citecolor=citation, filecolor=black, urlcolor=blue}
 
@@ -27,18 +28,21 @@
 
 In this study I have looked at the string search algorithm designed by Robert S. Boyer and J. Strother Moore \citep{boyer-1977} and analyze it's performance when compared to the Horspool algorithm as well as a brute force approach.
 
-\section{Detailed description of the algorithm(s)}
+\section{Detailed description of the algorithms}
 
-\subsection{Brute force and Horspool algorithms}
+\subsection{Brute force and Horspool}
 
 For the brute force approach we start comparing the leftmost character i of the pattern with the leftmost character j of the text. If they don't match we move the pattern one character forward and try again. But if we do get a match we compare the next i+1 and j+1 characters. This continues until we match the entire pattern and return the index of the first character the pattern matched in the text.
 % TODO: Complexity
 
 \subsection{Boyer-Moore}
 
-% TODO: compares from right instead of left
+The Boyer-Moore algorithm first difference from the brute force approach is that it compares right-to-left, which can allow it to skip many more characters on a mismatch.
+The second difference is its two precalculated tables, the "bad character table" and the "good suffix table", that it uses to find even more jump opportunities. These are computed directly from the pattern.
 
-The Boyer-Moore algorithm consists of two precalculated tables, the "bad character table" and the "good suffix table". The bad character table tells the algorithm how many steps it can jump forward based on when, if at all, the mismatched character in the text next appears in the pattern.
+\vspace{5mm}
+
+The bad character table tells the algorithm how many steps it can jump forward based on when, if at all, the mismatched character in the text next appears in the pattern.
 This part is also what makes up Horspool's algorithm.
 
 \vspace{5mm}
@@ -49,8 +53,18 @@ The algorithm gets the correct numbers from each of the tables and picks the hig
 
 \subsubsection{The bad character table}
 
-% TODO: content
-Some text here
+Pseudocode from \citep{levitin-2011}
+\begin{verbatim}
+ShiftTable(P[0..m - 1])
+// Fills the shift table used by Horspool’s and Boyer-Moore algorithms
+// Input: Pattern P [0..m - 1] and an alphabet of possible characters
+// Output: Table[0..size - 1] indexed by the alphabet’s characters and filled with shift sizes computed by formula (7.1)
+for i <- 0 to size - 1 do Table[i] <- m
+for j <- 0 to m - 2 do Table[P[j]] <- m - 1 - j
+return Table
+\end{verbatim}
+
+This table is calculated by creating an array containing the alphabet being used with every index initialized to the length of the pattern. We then step through each letter in the pattern, updating that letters index in the table to the number of jumps needed to move the pattern forward to line up the mismatched character with this character. Jumps the pattern past the letter if it does not exist in the pattern.
 
 \subsubsection{The good suffix table}
 
@@ -59,25 +73,37 @@ Some text here
 
 \section{Design choices}
 
-What choices were made in the implementation regarding data structures and any parts of the algorithm that were not completely specified in the pseudo code? Give motivations for your choices, and connect to theory, where appropriate. Do any choices affect time and/or memory efficiency?
+
 
 
 \section{Experiment Planning}
 
-Describe the inputs used and how the testing was done (repetitions, etc).  Give motivations for your choices, for instance, by explaining how input was designed/chosen to test the best, average, and worst case for your algorithm(s). Consider the input size required to test time efficiency against theoretical results carefully. Remember that you probably need many executions with different inputs (of the same size) to obtain a reliable result, such as an average, that you can report.
+Since what I really care about testing is the worst-case for each algorithm, I will mostly use texts and patterns where no match exists, so that what I am actually measuring is how long it takes for each algorithm to process the entire length of the text.
+I have of course done tests with matches in different places of the text to make sure the algorithm actually works and successfully finds a match that is there.
+I will be testing a few different scenarios, including some searches in natural text to try to get a sense for it's more average case performance. In these tests I used this AI-generated sample text to search through:
 
+\begin{quotation}
+"It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the other way-in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only. There were a king with a large jaw and a queen with a plain face, on the throne of England; there were a king with a large jaw and a queen with a fair face, on the throne of France. In both countries it was clearer than crystal to the lords of the State preserves of loaves and fishes, that things in general were settled for ever. It was the year of Our Lord one thousand seven hundred and seventy-five. Spiritual revelations were conceded to England at that favoured period, as at this. Mrs. Southcott had recently attained her five-and-twentieth blessed birthday, of whom a prophetic private in the Life Guards had heralded the sublime appearance by announcing that arrangements were made for the swallowing up of London and Westminster. Even the Cock-lane ghost had been laid only a round dozen of years, after rapping out its messages, as the spirits of this very year last past (supernaturally deficient in originality) rapped out theirs. Mere messages in the earthly order of events had lately come to the English Crown and People, from a congress of British subjects in America: which, strange to relate, have proved more important to the human race than any communications yet received through any of the chickens of the Cock-lane brood."
+\end{quotation}
+
+ For the more specialized tests I have the following:
+
+\begin{enumerate}
+\item A long text of the same repeating character and a pattern with the same repeating characters except the first or last one, for example text: "aaaa...aaaa" and pattern: "aaaaaab"/"baaaaaa". This should give bad results for the brute-force algorithm in the first version and bad for Horspool in the second due to how they start their comparisons from opposite sides of the pattern. Boyer-Moore should have no problems.
+\item A long text of the same two repeating character and a pattern with the same repeating characters except the first one, for example text: "abab...baba" and pattern: "ababac"/"cababa"
+\end{enumerate}
 
 \section{Results}
 \label{results}
 
-Give a number of executions of critical operations and/or time results. Present the results using tables, graphs, and/or text.
+My testing has shown that while the Boyer-Moore algorithm is better than Horspool in certain circumstances, often when searching in natural text Horspool performs just as well. And considering the extra work required to implement the extra parts required for the Boyer-Moore version, it might be the case that using Horspool is good enough.
 
 
 \section{Analysis}
 \label{analysis}
 
-Connect your results to the known theoretical results. Reason about whether your experiments are consistent with theory or in any way deviate from it, and if so, why. Also, reflect on your experimental design.
 
+While I tried to come up with test cases that would show how Boyer-Moore is more efficient than the other two, I am sure there are better examples and perhaps even examples where it performs worse.
 
 \section{Conclusions and future work}
 
